@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
 require("ts-node").register({
     transpileOnly: true,
@@ -44,7 +45,7 @@ router.get("/chat/:id", (req, res) => {
 });
 
 router.post("/chat/newChat", (req, res) => {
-    const newChatId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+    const newChatId = crypto.randomUUID();
     const newChat = {
         id: newChatId,
         name: `chat ${loadedChatJSON?.chats?.length + 1}`,
@@ -74,7 +75,7 @@ router.post("/chat/newMessage", (req, res) => {
         if (item.id === chatId) {
             const updateMessages = [...item.messages, message];
             const botResponse = {
-                id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+                id: crypto.randomUUID(),
                 message: BOT_MESSAGE[message.message] || "Hello there how are you",
                 isSender: false,
             };

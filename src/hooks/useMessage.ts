@@ -48,7 +48,7 @@ const useMessage = (chatId: string | undefined) => {
         };
 
         const messageObj = {
-            id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+            id: crypto.randomUUID(),
             message: userInputMsg,
             isSender: true,
         };
