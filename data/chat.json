@@ -1,0 +1,36 @@
+{
+    "chats": [
+        {
+            "id": "1",
+            "name": "chat 1",
+            "messages": [
+                {
+                    "id": "1",
+                    "message": "Hi",
+                    "isSender": true
+                },
+                {
+                    "id": "2",
+                    "message": "Hello",
+                    "isSender": false
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "name": "chat 2",
+            "messages": [
+                {
+                    "id": "1",
+                    "message": "Hi there how are you",
+                    "isSender": true
+                },
+                {
+                    "id": "2",
+                    "message": "Hello there how are you",
+                    "isSender": false
+                }
+            ]
+        }
+    ]
+}
