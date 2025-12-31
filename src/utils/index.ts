@@ -96,7 +96,7 @@ export async function addNewChat(
     if (navigate && Array.isArray(chats) && chats.length > 0) {
         const lastChat = chats[chats.length - 1];
         // Support both synchronous and asynchronous navigate implementations
-        await Promise.resolve(navigate(`/chats/${lastChat.id}`));
+        await Promise.resolve(navigate(`/chat/${lastChat.id}`));
     }
 }
 
