@@ -35,7 +35,7 @@ const useMessage = (chatId: string | undefined) => {
                 setRefetchChatData(false);
             }
         }
-    }, [chatId, refetchChatData, setRefetchChatData, loading]);
+    }, [chatId, refetchChatData, setRefetchChatData]);
 
     /* HandleCreactNewMessage Message */
     const handleSend = () => {
@@ -47,10 +47,8 @@ const useMessage = (chatId: string | undefined) => {
             handleCreateChat(resp.data.chats, true);
         };
 
-        const { messages } = messageList;
-
         const messageObj = {
-            id: `${messages?.length + 1}`,
+            id: crypto.randomUUID(),
             message: userInputMsg,
             isSender: true,
         };

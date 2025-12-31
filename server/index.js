@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 
 require("ts-node").register({
     transpileOnly: true,
@@ -44,10 +45,10 @@ router.get("/chat/:id", (req, res) => {
 });
 
 router.post("/chat/newChat", (req, res) => {
-    const newChatId = loadedChatJSON?.chats?.length + 1;
+    const newChatId = crypto.randomUUID();
     const newChat = {
-        id: newChatId.toString(),
-        name: `chat ${newChatId}`,
+        id: newChatId,
+        name: `chat ${loadedChatJSON?.chats?.length + 1}`,
         messages: [],
     };
 
@@ -59,11 +60,27 @@ router.post("/chat/newMessage", (req, res) => {
     console.log(req.body.chatId);
     const { chatId, message } = req.body;
 
+    // Validate that chatId exists
+    const chatExists = loadedChatJSON.chats.some((item) => item.id === chatId);
+    if (!chatExists) {
+        return res.status(404).json({ error: "Chat not found" });
+    }
+
+    // Validate message structure
+    const isValidMessage = message && 
+                          typeof message === 'object' && 
+                          typeof message.message === 'string' && 
+                          typeof message.isSender === 'boolean';
+    
+    if (!isValidMessage) {
+        return res.status(400).json({ error: "Invalid message structure" });
+    }
+
     const insertedChat = loadedChatJSON.chats.map((item) => {
         if (item.id === chatId) {
             const updateMessages = [...item.messages, message];
             const botResponse = {
-                id: `${updateMessages.length + 1}`,
+                id: crypto.randomUUID(),
                 message: BOT_MESSAGE[message.message] || "Hello there how are you",
                 isSender: false,
             };
