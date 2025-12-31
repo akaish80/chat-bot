@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3947';
+import { API_BASE_URL } from '../config';
 
 export const fetchMessage = (
     chatId: string,
