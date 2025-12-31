@@ -37,7 +37,7 @@ export const postNewChat = async () => {
     if (!val?.error) {
         result.data = val;
     } else {
-        result.error = "Failed";
+        result.error = val.error;
     }
 
     return result;
@@ -55,7 +55,7 @@ export const postNewMessage = async (chatId: string | undefined, obj: any) => {
     if (!val?.error) {
         result.data = val;
     } else {
-        result.error = "Failed";
+        result.error = val.error;
     }
 
     return result;
