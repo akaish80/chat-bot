@@ -87,6 +87,13 @@ export async function addNewChat(
     navigate: (url: string) => void | Promise<void>
 ) {
     const resp = await postNewChat();
+    
+    // Check for errors before proceeding
+    if (resp?.error) {
+        console.error('Failed to create new chat:', resp.error);
+        return;
+    }
+
     const chats = resp?.data?.chats;
 
     // Ensure any asynchronous work in handleCreateChat completes before navigating

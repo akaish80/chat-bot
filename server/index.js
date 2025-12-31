@@ -44,10 +44,10 @@ router.get("/chat/:id", (req, res) => {
 });
 
 router.post("/chat/newChat", (req, res) => {
-    const newChatId = loadedChatJSON?.chats?.length + 1;
+    const newChatId = `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
     const newChat = {
-        id: newChatId.toString(),
-        name: `chat ${newChatId}`,
+        id: newChatId,
+        name: `chat ${loadedChatJSON?.chats?.length + 1}`,
         messages: [],
     };
 
