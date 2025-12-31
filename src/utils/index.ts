@@ -97,13 +97,12 @@ export async function addNewChat(
     const chats = resp?.data?.chats;
 
     // Ensure any asynchronous work in handleCreateChat completes before navigating
-    await Promise.resolve(handleCreateChat(chats, false));
+    await handleCreateChat(chats, false);
 
     // Only navigate if we have at least one chat and a navigate function
     if (navigate && Array.isArray(chats) && chats.length > 0) {
         const lastChat = chats[chats.length - 1];
-        // Support both synchronous and asynchronous navigate implementations
-        await Promise.resolve(navigate(`/chat/${lastChat.id}`));
+        await navigate(`/chat/${lastChat.id}`);
     }
 }
 

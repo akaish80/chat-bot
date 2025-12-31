@@ -67,7 +67,12 @@ router.post("/chat/newMessage", (req, res) => {
     }
 
     // Validate message structure
-    if (!message || typeof message !== 'object' || !message.message || typeof message.isSender !== 'boolean') {
+    const isValidMessage = message && 
+                          typeof message === 'object' && 
+                          typeof message.message === 'string' && 
+                          typeof message.isSender === 'boolean';
+    
+    if (!isValidMessage) {
         return res.status(400).json({ error: "Invalid message structure" });
     }
 
