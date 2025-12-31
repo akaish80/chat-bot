@@ -17,6 +17,9 @@ function useFetchChats(url: string) {
                 method: "GET",
             })
                 .then((res) => {
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
                     return res.json();
                 })
                 .then((res) => {
@@ -29,7 +32,7 @@ function useFetchChats(url: string) {
                 })
                 .catch((e: any) => {
                     setLoading(false);
-                    setError(e);
+                    setError(e.message || String(e));
                     fetchTriggered.current = false
                 });
         }

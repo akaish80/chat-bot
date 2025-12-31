@@ -34,7 +34,7 @@ const ChatContainer = () => {
         <Stack spacing={2} sx={{ maxWidth: 600 }}>
             {selectedIndex === -1 && id !== undefined && (
                 <SnackbarContent
-                    message="Chat groupd not availabe"
+                    message="Chat group not available"
                     action={action}
                     sx={{ backgroundColor: "white", color: "black" }}
                 />

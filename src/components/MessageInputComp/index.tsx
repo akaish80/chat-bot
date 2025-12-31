@@ -5,9 +5,9 @@ import ButtonComp from "../ButtonComp";
 const MessageInputComp = (props: {
   message: string;
   setMessage: (e: string) => void;
-  handlClick: () => void;
+  handleClick: () => void;
 }) => {
-  const { message, setMessage, handlClick } = props;
+  const { message, setMessage, handleClick } = props;
   return (
     <Box
       sx={{
@@ -25,7 +25,7 @@ const MessageInputComp = (props: {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
       />
-      <ButtonComp label="Send" variant="contained" handlClick={handlClick} />
+      <ButtonComp label="Send" variant="contained" handleClick={handleClick} />
     </Box>
   );
 };

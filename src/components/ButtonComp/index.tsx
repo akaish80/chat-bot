@@ -5,13 +5,13 @@ import { memo } from "react";
 
 const ButtonCompNonMemo = (props: {
   label: string;
-  handlClick: () => void;
+  handleClick: () => void;
   variant: any
   size?: OverridableStringUnion<'small' | 'medium' | 'large', ButtonPropsSizeOverrides>
 }) => {
-  const { label, size, handlClick, variant } = props
+  const { label, size, handleClick, variant } = props
   return (
-<Button size={size} variant={variant} onClick={handlClick}>
+<Button size={size} variant={variant} onClick={handleClick}>
 {label}
 </Button>
 );

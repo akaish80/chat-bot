@@ -59,11 +59,22 @@ router.post("/chat/newMessage", (req, res) => {
     console.log(req.body.chatId);
     const { chatId, message } = req.body;
 
+    // Validate that chatId exists
+    const chatExists = loadedChatJSON.chats.some((item) => item.id === chatId);
+    if (!chatExists) {
+        return res.status(404).json({ error: "Chat not found" });
+    }
+
+    // Validate message structure
+    if (!message || typeof message !== 'object' || !message.message || typeof message.isSender !== 'boolean') {
+        return res.status(400).json({ error: "Invalid message structure" });
+    }
+
     const insertedChat = loadedChatJSON.chats.map((item) => {
         if (item.id === chatId) {
             const updateMessages = [...item.messages, message];
             const botResponse = {
-                id: `${updateMessages.length + 1}`,
+                id: `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
                 message: BOT_MESSAGE[message.message] || "Hello there how are you",
                 isSender: false,
             };

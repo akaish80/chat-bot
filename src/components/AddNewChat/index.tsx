@@ -33,7 +33,7 @@ handleCreateChat: () => {},
         label="Add New Chat"
         variant="contained"
         size={size}
-        handlClick={() => addNewChat(handleCreateChat, navigate)}
+        handleClick={() => addNewChat(handleCreateChat, navigate)}
       />
     </Box>
   );

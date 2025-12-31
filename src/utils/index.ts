@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3947';
+
 export const fetchMessage = (
     chatId: string,
     setLoading: (val: boolean) => void,
@@ -6,10 +8,13 @@ export const fetchMessage = (
     setError: (err: string) => void,
     fetchTriggered: any
 ) => {
-    fetch(`http://localhost:3947/chat/${chatId}`, {
+    fetch(`${API_BASE_URL}/chat/${chatId}`, {
         method: "GET",
     })
         .then((res) => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
             return res.json();
         })
         .then((res) => {
@@ -22,54 +27,76 @@ export const fetchMessage = (
         })
         .catch((e: any) => {
             setLoading(false);
-            setError(e);
+            setError(e.message || String(e));
             fetchTriggered.current = false;
         });
 };
 
 export const postNewChat = async () => {
-    const rep = fetch(`http://localhost:3947/chat/newChat`, {
-        method: "POST",
-    });
+    try {
+        const response = await fetch(`${API_BASE_URL}/chat/newChat`, {
+            method: "POST",
+        });
 
-    const val = await (await rep).json();
-    const result: { data: any; error: any } = { data: null, error: null };
-    if (!val?.error) {
-        result.data = val;
-    } else {
-        result.error = "Failed";
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const val = await response.json();
+        const result: { data: any; error: any } = { data: null, error: null };
+        if (!val?.error) {
+            result.data = val;
+        } else {
+            result.error = val.error;
+        }
+
+        return result;
+    } catch (error: any) {
+        return { data: null, error: error.message || String(error) };
     }
-
-    return result;
 };
 
 export const postNewMessage = async (chatId: string | undefined, obj: any) => {
-    const rep = fetch(`http://localhost:3947/chat/newMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ chatId: chatId, message: obj }),
-    });
+    try {
+        const response = await fetch(`${API_BASE_URL}/chat/newMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ chatId: chatId, message: obj }),
+        });
 
-    const val = await (await rep).json();
-    const result: { data: any; error: any } = { data: null, error: null };
-    if (!val?.error) {
-        result.data = val;
-    } else {
-        result.error = "Failed";
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const val = await response.json();
+        const result: { data: any; error: any } = { data: null, error: null };
+        if (!val?.error) {
+            result.data = val;
+        } else {
+            result.error = val.error;
+        }
+
+        return result;
+    } catch (error: any) {
+        return { data: null, error: error.message || String(error) };
     }
-
-    return result;
 };
 
 export async function addNewChat(
-    handleCreateChat: (data: any, refetch: boolean) => void,
-    navigate: (url: string) => void
+    handleCreateChat: (data: any, refetch: boolean) => void | Promise<void>,
+    navigate: (url: string) => void | Promise<void>
 ) {
     const resp = await postNewChat();
     const chats = resp?.data?.chats;
-    handleCreateChat(chats, false);
-    if (navigate) {
-        navigate(`/chats/${chats[chats.length - 1].id}`);
+
+    // Ensure any asynchronous work in handleCreateChat completes before navigating
+    await Promise.resolve(handleCreateChat(chats, false));
+
+    // Only navigate if we have at least one chat and a navigate function
+    if (navigate && Array.isArray(chats) && chats.length > 0) {
+        const lastChat = chats[chats.length - 1];
+        // Support both synchronous and asynchronous navigate implementations
+        await Promise.resolve(navigate(`/chats/${lastChat.id}`));
     }
 }
 

@@ -40,7 +40,7 @@ const ChatMessageContainer = (props: { chatId: string | undefined }) => {
                 <MessageInputComp
                     message={userInputMsg}
                     setMessage={setUserInputMsg}
-                    handlClick={handleSend}
+                    handleClick={handleSend}
                 />
             </Box>
         </Box>
